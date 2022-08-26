@@ -1,0 +1,17 @@
+(function executeRule(current, previous /*null when async*/) {
+	var incidentNumber= [];
+	var itilNotify= new GlideRecord('incident');
+	itilNotify.addQuery('short_description', current.short_description);
+	itilNotify.addQuery('number', '!=', current.number);
+	itilNotify.addActiveQuery();
+	itilNotify.query();
+
+	while(itilNotify.next())
+	{
+		incidentNumber.push(itilNotify.number.toString());
+		//gs.addInfoMessage(itilNotify.number);
+	}
+	var incidentString = incidentNumber.join(', ');
+	gs.addInfoMessage("There are matching short descriptions: "+ incidentString);	
+
+})(current, previous);
