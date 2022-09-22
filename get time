@@ -1,0 +1,8 @@
+var gdt = new GlideDateTime();
+  outputs.now_datetime = gdt;
+  outputs.now_string = gdt.getDisplayValueInternal();
+  outputs.now_numeric = gdt.getNumericValue();
+  var nowDate = new GlideDate();
+  var datePartString = gdt.getDisplayValueInternal().slice(0,-9);
+  nowDate.setValue(datePartString);
+  outputs.now_date = nowDate;
