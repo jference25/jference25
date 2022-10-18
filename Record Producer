@@ -1,0 +1,47 @@
+current.state = 1; // Open
+current.contact_type = 'web';
+current.category = 0; // Incident
+current.priority = 1; // Critical
+current.account = producer.account;
+current.contact = producer.submitter;
+current.assignment_group = "157823bedb5bc1102408819b13961998"; // Endpoint – Tier 2
+current.short_description = 'End User Locked Out' + ' - ' + producer.end_user_locked_out.name;
+current.description =
+    'Account: ' + producer.account.name + '\n' +
+    'Submitter: ' + producer.submitter.name + '\n' +
+    'End User Locked Out: ' + producer.end_user_locked_out.name + '\n' +
+    'Username: ' + producer.username + '\n\n' +
+    'System Impacted / Locked Out: ' + '\n';
+
+if (producer.ad == 'true') {
+    current.description += 'AD\n';
+}
+
+if (producer.pcc == 'true') {
+    current.description += 'PCC\n';
+}
+
+if (producer.xp2 == 'true') {
+    current.description += 'XP2\n';
+}
+
+if (producer.other == 'true') {
+    current.description += producer.other_string + '\n';
+}
+
+current.description +=
+    '\n' + "Follow Up Contact Information: Email / Phone " + producer.follow_up_contact_information_email_phone;
+
+var gr = new GlideRecord('sn_customerservice_team_member');
+gr.addQuery("account", producer.account);
+gr.addQuery('responsibility', '157823bedb5bc1102408819b13961998'); // Endpoint – Tier 2
+gr.query();
+
+if (gr.next()) {
+    current.assigned_to = gr.user;
+} else {
+    current.assigned_to = '';
+}
+
+//producer.redirect = "customer_redirect.do";
+producer.portal_redirect = "/cafe?id=csm_ticket&table=sn_customerservice_case&sys_id=" + current.sys_id;
